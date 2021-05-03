@@ -29,7 +29,7 @@ void InsertAtTail(node* head, int val)
 void Display(node* head)
 {
     node* temp = head;
-    while(temp->next != NULL)
+    while(temp)
     {
         cout << temp->data << endl;
         temp = temp->next;
