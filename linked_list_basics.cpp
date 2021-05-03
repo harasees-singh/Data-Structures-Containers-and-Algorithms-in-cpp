@@ -36,14 +36,14 @@ void Display(node* head)
     }
 }
 
-int main()
-{
-    node a(4), b(5), c(6);
-    a.next = &b;
-    b.next = &c;
-    node* head = &a;
-    cout << a.data << " " << (a.next)->next->data << endl;
-    InsertAtTail(head, 7);
+// int main()
+// {
+//     node a(4), b(5), c(6);
+//     a.next = &b;
+//     b.next = &c;
+//     node* head = &a;
+//     cout << a.data << " " << (a.next)->next->data << endl;
+//     InsertAtTail(head, 7);
 
-    Display(head);    
-}
+//     Display(head);    
+// }
