@@ -26,5 +26,29 @@
 #define FIO ios_base::sync_with_stdio(false); cin.tie(NULL);
 #define loop(var, initial, final) for(int var=initial; var < final; var++)
 using namespace std;
-// we have a list of strings. find number of pairs of i, j (j>i)
-// such that w[i] + w[j] is a palindrome.
+// we have a list w of strings. find number of pairs of i, j (j>i)
+// such that atleast one of the jumbled forms of w[i] + w[j] is a palindrome.
+int hash_(string s){
+    int cur=0;
+    for(auto ch:s){
+        cur^=(1<<(ch-'a'));       // 0th position for a and 25th pos for z
+    }
+    return cur;
+}
+int32_t main(){
+    FIO 
+    vector<string> w={"abc", "ba", "the", "et", "t", "cba"};
+    int power_2 = 0;
+    mii answer;                 // need to check if the hash of 1 string ^ hash of another string == 0 or a power of 2
+    int ans=0;        
+
+    for(string s:w){
+        int hash_val = hash_(s);
+        ans+=answer[hash_val];
+        answer[hash_val]++;
+        loop(i, 0, 26){
+            ans+=answer[hash_val^(1<<i)]; 
+        }
+    }
+    cout << ans << endl;
+}
