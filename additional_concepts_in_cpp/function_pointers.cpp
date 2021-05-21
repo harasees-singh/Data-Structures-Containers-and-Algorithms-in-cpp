@@ -60,7 +60,7 @@ int main(){
     vector<int> v = {1, 2, 3, 4, 5};
     // callback 
     for_each(v, func);
-
+    int a=10;
     // lambda in cpp
     for_each(v, [](int v) {cout << "value from lambda " << v << endl;});
     return 0;
