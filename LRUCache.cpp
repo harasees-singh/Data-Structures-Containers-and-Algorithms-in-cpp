@@ -26,7 +26,7 @@ int main(){
             if(key_address.find(key)!=key_address.end()){           // if the key was already present then we can update it's value
                 auto ptr = key_address[key];
                 order.erase(ptr);
-                order.pb(value);
+                order.pb(key);
                 key_address[key]=--order.end();
             }
             else{
@@ -56,6 +56,7 @@ int main(){
                 cout << key_val[key] << endl;
                 order.erase(key_address[key]);
                 order.pb(key);
+                key_address[key] = --order.end();
             }
             else{
                 cout << "key not found " << endl;
