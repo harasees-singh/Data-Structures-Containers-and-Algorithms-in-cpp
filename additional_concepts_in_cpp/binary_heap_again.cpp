@@ -25,9 +25,7 @@ class MinHeap{
                 int min_index;
                 2*i + 1 < (list.size()-1)? right_child = list[2*i+1] :right_child=INT32_MAX;
                 left_child<right_child ? min_index = 2*i: min_index=2*i+1;
-                // cout << "i " << i << endl;
-                // cout << "left child " << left_child << " right child " << right_child << endl;
-                // cout << "minimum index " << min_index << endl;
+                
                 if(list[min_index] > list[i]){
                     return;
                 }
@@ -43,6 +41,10 @@ class MinHeap{
             }
             BuildMinHeap();
         }
+        // sift up
+        // use this for inserting an element in min heap
+        // this will insert the element at the end of the list and then propagate it upwards till it fits at the right place 
+        // and hence the name sift up
         void Insert(int a){
             list.pb(a);
             int i = (list.size()-1);
