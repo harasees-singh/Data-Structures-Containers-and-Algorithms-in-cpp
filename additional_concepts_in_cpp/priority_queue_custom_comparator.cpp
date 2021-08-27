@@ -19,6 +19,7 @@ int main(){
     p.push(5);
     p.push(1);
     p.push(6);
+    
     while(p.size()){
         cout << p.top() << endl;
         p.pop();

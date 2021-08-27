@@ -5,6 +5,8 @@
         "future": "cpp",
         "system_error": "cpp",
         "typeindex": "cpp",
-        "xlocale": "cpp"
+        "xlocale": "cpp",
+        "queue": "cpp",
+        "unordered_map": "cpp"
     }
 }
