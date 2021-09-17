@@ -9,5 +9,9 @@
         "queue": "cpp",
         "unordered_map": "cpp"
     },
-    "C_Cpp.errorSquiggles": "Disabled"
+    "C_Cpp.errorSquiggles": "Disabled",
+    "java.project.sourcePaths": [
+        "SelectionSort",
+        "PEC Assignments"
+    ]
 }
