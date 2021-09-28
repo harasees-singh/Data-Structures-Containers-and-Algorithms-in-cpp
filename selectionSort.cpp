@@ -1,65 +1,54 @@
 #include<bits/stdc++.h>
-#define infinity 999999999999999999
-#define float long double
-#define sz(v) ((int)(v).size())
-#define all(v) (v).begin(),(v).end()
-#define MOD_DEFINE const int MOD = 1e9 + 7;
-#define And &&
-#define Or ||
-#define endl '\n'
-#define space " "
-#define int long long
-#define pii pair<int, int>
-#define vi vector<int>
-#define pb(n) push_back(n)
-#define mii map<int, int>
-#define umii unordered_map<int, int>
-#define test_cases_loop int t; cin >> t; while(t--)
-#define FIO ios_base::sync_with_stdio(false); cin.tie(NULL);
-#define loop(var, initial, final) for(int var=initial; var < final; var++)
-#define cout std::cout
-#define cin std::cin
-#define safe_unordered_map(int, T) unordered_map<int, T, custom_hash>
-
 using namespace std;
 
-int find_min_element(int i, vi &arr){
-
+int find_min_element(int i, vector<int> &arr){
     int minima = i;
 
-    for(int j = i + 1; j < sz(arr); j++){
-
+    for(int j = i + 1; j < arr.size(); j++){
         if(arr[j] < arr[minima]) minima = j; 
     }
-
     return minima;
 }
 
-void SelectionSort(vi &arr){
-
-    for(int i = 0; i < sz(arr); i++){
-
+void SelectionSort(vector<int> &arr){
+    for(int i = 0; i < arr.size(); i++){
         int index = find_min_element(i, arr);
-
         swap(arr[i], arr[index]);
     }
-
-    
-
     return;
 }
 
-MOD_DEFINE
 int32_t main(){
-    FIO
-
-    vi input = {2, 4, 7, 9, 10, 4, 6, 11};
-
+    vector<int> input = {2, 4, 7, 9, 10, 4, 6, 11};
     SelectionSort(input);
-
-    loop(i, 0, sz(input)) cout << input[i] << space; cout << endl;
-
-    int arr[2] = {1, 2};
-
+    for(int i = 0; i < input.size(); i++) 
+        cout << input[i] << ' '; 
+        
+    cout << endl;
+    cout << "Harasees Singh, SID: 20103074" << endl;
     return 0;
+    
 }
+// Time Complexity Analysis
+// Since the find_min_element(i, arr) function compares all the n - i - 1 (n is the size of the arr) 
+// elements with the ith element and SelectionSort(arr) 
+// calls this function for every i from 0 to n - 1 therefore the total number of comparisons = 
+// SUMMATION(n - i - 1)  where i ranges from 0 to n - 1
+// this summation evaluates out to be n*(n - 1)/2 . Also for each element we swap it atmost once.
+// Therefore the total number of operations = n*(n - 1)/2 + n in the worst case.
+// Therefore Time complexity = O(n^2), since n^2 + n ~ n^2 in big O notation. Also since we are ignoring the linear factor (n) 
+// the average and the best case (linear factor n=0 since there are no swaps for the best case) time complexities also boil down to O(n^2) 
+// Best case :                  O(n^2)       
+// Average case :               O(n^2)       
+// Worst case :                 O(n^2)    
+// Space Complexity Analysis
+// Since Selection Sort is an in-place sorting algorithm 
+// therefore we need only a constant amount (independent of the size of arr) of auxiliary space. Hence the space complexity boils down to 
+// O(1) .
+// Best case :                  O(1)
+// Average case :               O(1)
+// Worst case :                 O(1
+// Examples :
+// Best case :                  sorted array like {1, 2, 3, 4, 5, 7} etc. {no swaps required}
+// Average case :               any random array with some elements in their sorted postions like {1, 3, 2, 4} etc.
+// Worst case :                 reverse sorted array like {6, 4, 2, 1} etc. {n - 1 swaps required

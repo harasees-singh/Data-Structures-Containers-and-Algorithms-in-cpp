@@ -7,9 +7,11 @@
         "typeindex": "cpp",
         "xlocale": "cpp",
         "queue": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "iostream": "cpp",
+        "new": "cpp"
     },
-    "C_Cpp.errorSquiggles": "Disabled",
+    "C_Cpp.errorSquiggles": "Enabled",
     "java.project.sourcePaths": [
         "SelectionSort",
         "PEC Assignments"
