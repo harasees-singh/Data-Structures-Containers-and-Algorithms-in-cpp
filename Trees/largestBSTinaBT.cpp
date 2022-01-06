@@ -1,3 +1,4 @@
+// ਹਰਅਸੀਸ ਸਿੰਘ 
 #include<bits/stdc++.h>
 
 #include<ext/pb_ds/assoc_container.hpp>
@@ -9,19 +10,18 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 #define ff                              first
 #define ss                              second
-#define infinity                        999999999999999999
+#define infinity                        8999999999999999999
 #define sz(v)                           ((int)(v).size())
 #define all(v)                          (v).begin(),(v).end()
 #define MOD_DEFINE                      const int MOD = 1e9 + 7;
 #define endl                            '\n'
-#define space                           " "
 #define int                             long long
 #define pii                             pair<int, int>
 #define vi                              vector<int>
 #define pb(n)                           push_back(n)
 #define mii                             map<int, int>
 #define umii                            unordered_map<int, int>
-#define test_cases_loop int t;          cin >> t; while(t--)
+#define w(t)                            int t; cin >> t; while(t--)
 #define FIO                             ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define l(var, initial, final)          for(int var=initial; var < final; var++)
 #define cout                            std::cout
@@ -31,58 +31,61 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 #define fps(x,y)                        fixed<<setprecision(y)<<x
 
 MOD_DEFINE
+template <typename T>
+class BinaryTreeNode {
+        public: 
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
 
-struct FenwickTree{
-    // zero based indexing
-    // use query(l, r) to get the sum of elements in range[l, r]
-    // exceptions handled when l = 0; (read(-1) returns 0)
-    // increase and query take logn time and constant space.
-    // constructor takes vector<int> input (a const reference) to construct the tree (ft) in nlogn time.
-
-    vector<int> ft;
-
-    FenwickTree(vi const &I){
-        ft.assign(I.size(), 0);
-
-        for(int i = 0; i < I.size(); i++){
-            increase(i, I[i]);
-        }
-    }
-
-    int read(int idx){
-        if(idx < 0) return 0;
-
-        int ret = 0;
-
-        for(int i = idx; i >= 0; i = (i&(i + 1)) - 1){
-            ret += ft[i];
-        }
-        return ret;
-    }
-
-    void increase(int i, int delta){
-        for(int j = i; j < ft.size(); j = j|(j + 1)){
-            ft[j] += delta;
-        }
-    }
-
-    int query(int l, int r){
-        return read(r) - read(l - 1);
-    }
+        BinaryTreeNode(T data) {
+                this->data = data;
+                left = NULL;
+                right = NULL;
+}
 };
-
 int32_t main(){
-    FIO 
-    vi arr = {0, 1, 2, 5, -1, 3};
+        FIO 
 
-    int n; cin >> n;
+        return 0;
+}
 
-    FenwickTree F(arr);
+int mx = 1;
 
-    cout << F.query(1, 4) << endl;
+// #include<pair>
+#define pii pair<int, int>
+// {min, max}
+bool is_bst(int root, pii left, pii right){
+    	return (root > left.second) and (root < right.first);
+}
 
-    F.increase(3, 1);
-    cout << F.query(1, 4) << endl;
+pair<int, pii> help(BinaryTreeNode<int> *root){
+    	if(!root)
+            	return make_pair(0, make_pair(INT32_MAX, INT32_MIN));
+		
+    	pair<int, pii> left = help(root->left);
+    	pair<int, pii> right = help(root -> right);
+    
+    	pii l = left.second;
+    	pii r = right.second;
+    	
+		int h = 0;
+    	if(is_bst(root->data, l, r)){
+            	h = max(left.first, right.first) + 1;
+            	mx = max(mx, h);
+        }
+    	if(h == 0){
+            	return {INT32_MIN, {INT32_MIN, INT32_MAX}};
+        }
+    	pair<int, pii> ret;
+    	ret.first = h;
+    	ret.second = {min(min(l.first, r.first), root->data), max(max(l.second, r.second), root->data)};
+    	return ret;
+    
+}
 
-    return 0;
+int largestBSTSubtree(BinaryTreeNode<int> *root) {
+    	help(root);
+    
+    	return mx;
 }

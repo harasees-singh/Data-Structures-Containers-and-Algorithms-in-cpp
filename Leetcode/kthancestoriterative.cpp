@@ -1,3 +1,4 @@
+// ਹਰਅਸੀਸ ਸਿੰਘ 
 #include<bits/stdc++.h>
 
 #include<ext/pb_ds/assoc_container.hpp>
@@ -9,19 +10,18 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 #define ff                              first
 #define ss                              second
-#define infinity                        999999999999999999
+#define infinity                        8999999999999999999
 #define sz(v)                           ((int)(v).size())
 #define all(v)                          (v).begin(),(v).end()
 #define MOD_DEFINE                      const int MOD = 1e9 + 7;
 #define endl                            '\n'
-#define space                           " "
 #define int                             long long
 #define pii                             pair<int, int>
 #define vi                              vector<int>
 #define pb(n)                           push_back(n)
 #define mii                             map<int, int>
 #define umii                            unordered_map<int, int>
-#define test_cases_loop int t;          cin >> t; while(t--)
+#define w(t)                            int t; cin >> t; while(t--)
 #define FIO                             ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define l(var, initial, final)          for(int var=initial; var < final; var++)
 #define cout                            std::cout
@@ -32,57 +32,49 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 MOD_DEFINE
 
-struct FenwickTree{
-    // zero based indexing
-    // use query(l, r) to get the sum of elements in range[l, r]
-    // exceptions handled when l = 0; (read(-1) returns 0)
-    // increase and query take logn time and constant space.
-    // constructor takes vector<int> input (a const reference) to construct the tree (ft) in nlogn time.
+int32_t main(){
+        FIO 
 
-    vector<int> ft;
+        return 0;
+}
 
-    FenwickTree(vi const &I){
-        ft.assign(I.size(), 0);
+class TreeAncestor {
+public:
+    int l;
+    int N;
+    vector<vector<int>> up;
+    
+    TreeAncestor(int n, vector<int>& parent) {
+            N = n;
+        
+            l = 0;
 
-        for(int i = 0; i < I.size(); i++){
-            increase(i, I[i]);
-        }
+            int c(N);
+            while(c) l++, c/=2;
+
+            up = vector<vector<int>>(N + 1, vector<int>(l + 1, 0));
+
+            for(int i = 1; i <= N; i++){
+                    up[i][0] = parent[i - 1] + 1;
+            }
+            up[1][0] = 0;
+            for(int j = 1; j <= l; j++){
+                    for(int i = 1; i <= N; i++){
+                            up[i][j] = up[up[i][j - 1]][j - 1];
+                    }
+            }
     }
-
-    int read(int idx){
-        if(idx < 0) return 0;
-
-        int ret = 0;
-
-        for(int i = idx; i >= 0; i = (i&(i + 1)) - 1){
-            ret += ft[i];
-        }
-        return ret;
-    }
-
-    void increase(int i, int delta){
-        for(int j = i; j < ft.size(); j = j|(j + 1)){
-            ft[j] += delta;
-        }
-    }
-
-    int query(int l, int r){
-        return read(r) - read(l - 1);
+    
+    int getKthAncestor(int node, int k) {
+            
+            int bit = 0;
+            int ret = ++node;
+            while(k and ret){   
+                    if(k&1)
+                        ret = up[ret][bit];
+                    k >>= 1;
+                    bit++;
+            }
+            return ret - 1;
     }
 };
-
-int32_t main(){
-    FIO 
-    vi arr = {0, 1, 2, 5, -1, 3};
-
-    int n; cin >> n;
-
-    FenwickTree F(arr);
-
-    cout << F.query(1, 4) << endl;
-
-    F.increase(3, 1);
-    cout << F.query(1, 4) << endl;
-
-    return 0;
-}

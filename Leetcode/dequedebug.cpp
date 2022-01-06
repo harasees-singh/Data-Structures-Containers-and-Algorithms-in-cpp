@@ -31,58 +31,81 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 #define fps(x,y)                        fixed<<setprecision(y)<<x
 
 MOD_DEFINE
-
-struct FenwickTree{
-    // zero based indexing
-    // use query(l, r) to get the sum of elements in range[l, r]
-    // exceptions handled when l = 0; (read(-1) returns 0)
-    // increase and query take logn time and constant space.
-    // constructor takes vector<int> input (a const reference) to construct the tree (ft) in nlogn time.
-
-    vector<int> ft;
-
-    FenwickTree(vi const &I){
-        ft.assign(I.size(), 0);
-
-        for(int i = 0; i < I.size(); i++){
-            increase(i, I[i]);
+class Deque {
+public:
+    int front, back;
+    int size;
+    int*arr;
+    Deque(int n){
+        arr = new int[n];
+        front=-1,back=-1;
+        size=0;
+    }
+    void insertRear(int n){
+        if(size==10){
+            cout << -1 << endl; 
+            return;
         }
-    }
-
-    int read(int idx){
-        if(idx < 0) return 0;
-
-        int ret = 0;
-
-        for(int i = idx; i >= 0; i = (i&(i + 1)) - 1){
-            ret += ft[i];
+        if(back==-1){
+            arr[0]=n; back=0; front=0; return;
         }
-        return ret;
+        arr[(++back)%10]=n;
+        size++;
     }
-
-    void increase(int i, int delta){
-        for(int j = i; j < ft.size(); j = j|(j + 1)){
-            ft[j] += delta;
+    void insertFront(int n){
+        if(size==10){
+            cout << -1 << endl; 
+            return;
         }
+        if(front==-1){
+            arr[9]=n; front=9; back=9; return;
+        }
+        front = (front - 1 + 10)%10;
+        arr[(front)] = n; 
+        size++;
     }
-
-    int query(int l, int r){
-        return read(r) - read(l - 1);
+    void deleteFront(){
+        if(size==0){
+            cout << -1 << endl; 
+            return;
+        }
+        size--;
+        front++;
     }
+    void deleteRear(){
+        if(size == 0){
+            cout << -1 << endl; 
+            return; 
+        }
+        back = (back - 1 + 10)%10; size--;
+    }
+    int getFront(){
+        if(size==0) return -1;
+        
+        return arr[front];
+    }
+    int getRear(){
+        if(size == 0) return -1;
+        
+        return arr[back%10];
+    }
+    
+    
 };
 
 int32_t main(){
     FIO 
-    vi arr = {0, 1, 2, 5, -1, 3};
+    Deque q(10);
 
-    int n; cin >> n;
+    q.deleteFront();
 
-    FenwickTree F(arr);
+    q.insertFront(1), q.insertFront(2);
 
-    cout << F.query(1, 4) << endl;
+    q.deleteRear();
 
-    F.increase(3, 1);
-    cout << F.query(1, 4) << endl;
+    q.deleteRear();
+
+    cout << q.getFront() << endl;
 
     return 0;
 }

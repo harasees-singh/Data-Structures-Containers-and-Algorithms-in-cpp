@@ -32,57 +32,21 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 MOD_DEFINE
 
-struct FenwickTree{
-    // zero based indexing
-    // use query(l, r) to get the sum of elements in range[l, r]
-    // exceptions handled when l = 0; (read(-1) returns 0)
-    // increase and query take logn time and constant space.
-    // constructor takes vector<int> input (a const reference) to construct the tree (ft) in nlogn time.
+template<typename T>
+struct TreeNode{
+    T data; 
+    vector<TreeNode<T>*> children;
 
-    vector<int> ft;
-
-    FenwickTree(vi const &I){
-        ft.assign(I.size(), 0);
-
-        for(int i = 0; i < I.size(); i++){
-            increase(i, I[i]);
-        }
+    TreeNode(int n){
+        data = n;
     }
-
-    int read(int idx){
-        if(idx < 0) return 0;
-
-        int ret = 0;
-
-        for(int i = idx; i >= 0; i = (i&(i + 1)) - 1){
-            ret += ft[i];
-        }
-        return ret;
-    }
-
-    void increase(int i, int delta){
-        for(int j = i; j < ft.size(); j = j|(j + 1)){
-            ft[j] += delta;
-        }
-    }
-
-    int query(int l, int r){
-        return read(r) - read(l - 1);
+    ~TreeNode(){
+        for(int i = 0; i < children.size(); i++) delete children[i];
     }
 };
 
 int32_t main(){
     FIO 
-    vi arr = {0, 1, 2, 5, -1, 3};
-
-    int n; cin >> n;
-
-    FenwickTree F(arr);
-
-    cout << F.query(1, 4) << endl;
-
-    F.increase(3, 1);
-    cout << F.query(1, 4) << endl;
 
     return 0;
 }

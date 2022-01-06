@@ -1,2 +1,3 @@
+;
 
-    // cout << *s.pop() << '\n';
+    B.PostOrderTraversal();

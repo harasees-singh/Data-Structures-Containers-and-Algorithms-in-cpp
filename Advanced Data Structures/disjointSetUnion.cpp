@@ -1,11 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int Rank[101];
-int parent[101];
+const int N = 500000;
+int Rank[N + 1];
+int parent[N + 1];
 
 void MakeSet(){
-        for(int i = 1; i <= 100; i++)
+        for(int i = 1; i <= N; i++)
                 parent[i] = i;
 }
 

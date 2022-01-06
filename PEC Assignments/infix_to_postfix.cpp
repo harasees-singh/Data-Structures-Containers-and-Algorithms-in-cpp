@@ -37,8 +37,6 @@ bool is_variable(char t){
 int32_t main(){
     FIO 
 
-    // cout << is_variable('c') << endl;
-
     stack<char> expression;
 
     string s; cin >> s; 
@@ -46,8 +44,6 @@ int32_t main(){
     unordered_map<char, int> priority = {{'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}, {'^', 3}};
 
     string postfix; 
-
-    cout << priority['^'] << endl;
 
     for(char c : s){
 
@@ -68,25 +64,3 @@ int32_t main(){
 
     return 0;
 }
-
-
-
-
-
-
-
-
-// if(expression.empty() == false and priority[expression.top()] <= priority[c])
-                //         expression.push(c);
-
-                // else if(expression.empty() == false){
-                //     while(!expression.empty() and priority[expression.top()] > priority[c])
-                //         postfix += expression.top(), expression.pop(); 
-                //         expression.push(c);
-                // }
-                // else
-                //         expression.push(c);
-
-                // cout << expression.top() << endl;
-
-                // if(expression.empty() == false and priority[expression.top()] > priotiy[c])

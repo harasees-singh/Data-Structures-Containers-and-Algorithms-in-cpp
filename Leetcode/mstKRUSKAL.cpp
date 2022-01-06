@@ -1,3 +1,4 @@
+// ਹਰਅਸੀਸ ਸਿੰਘ 
 #include<bits/stdc++.h>
 
 #include<ext/pb_ds/assoc_container.hpp>
@@ -9,19 +10,18 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 #define ff                              first
 #define ss                              second
-#define infinity                        999999999999999999
+#define infinity                        8999999999999999999
 #define sz(v)                           ((int)(v).size())
 #define all(v)                          (v).begin(),(v).end()
 #define MOD_DEFINE                      const int MOD = 1e9 + 7;
 #define endl                            '\n'
-#define space                           " "
 #define int                             long long
 #define pii                             pair<int, int>
 #define vi                              vector<int>
 #define pb(n)                           push_back(n)
 #define mii                             map<int, int>
 #define umii                            unordered_map<int, int>
-#define test_cases_loop int t;          cin >> t; while(t--)
+#define w(t)                            int t; cin >> t; while(t--)
 #define FIO                             ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 #define l(var, initial, final)          for(int var=initial; var < final; var++)
 #define cout                            std::cout
@@ -32,57 +32,72 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 MOD_DEFINE
 
-struct FenwickTree{
-    // zero based indexing
-    // use query(l, r) to get the sum of elements in range[l, r]
-    // exceptions handled when l = 0; (read(-1) returns 0)
-    // increase and query take logn time and constant space.
-    // constructor takes vector<int> input (a const reference) to construct the tree (ft) in nlogn time.
+// dsu
 
-    vector<int> ft;
+int parent[];
+const int N = 90;
 
-    FenwickTree(vi const &I){
-        ft.assign(I.size(), 0);
+int findParent(int i){
+        if(parent[i] == i)
+                return i;
+        return findParent(parent[i]);
+}
 
-        for(int i = 0; i < I.size(); i++){
-            increase(i, I[i]);
+void MakeSet(){
+        for(int i = 0; i < N; i++){
+                parent[i] = i;
         }
-    }
+}
 
-    int read(int idx){
-        if(idx < 0) return 0;
 
-        int ret = 0;
+void Union(int u, int v){
+        u = findParent(u);
+        v = findParent(v);
 
-        for(int i = idx; i >= 0; i = (i&(i + 1)) - 1){
-            ret += ft[i];
+        // parent[u] = u;
+        // parent[v] = v;
+
+        parent[u] = v;
+}
+// kruskal
+
+vector<pair<int, pair<int, int>>> edges;
+// {w, {u, v}}
+
+// {1, 2, 3} => 2
+// union(3, 4)
+// {1, 2, 3, 4} => 2
+// {5, 6} => 5
+vector<vi> g;
+
+void Kruskal(){
+        sort(edges.begin(), edges.end());
+
+        for(auto p : edges){
+                int w = p.first;
+
+                int u, v;
+
+                u = p.second.first;
+                v = p.second.second;
+
+
+                if(findParent(u) != findParent(v)){    
+                        // O(1)    
+                        Union(u, v);
+
+                        g[u].pb(v);
+                        g[v].pb(u);
+                }
         }
-        return ret;
-    }
-
-    void increase(int i, int delta){
-        for(int j = i; j < ft.size(); j = j|(j + 1)){
-            ft[j] += delta;
-        }
-    }
-
-    int query(int l, int r){
-        return read(r) - read(l - 1);
-    }
-};
+}       
+// ElgE
+// E < V^2
+// lgE similar to lgV
+// ElgV
 
 int32_t main(){
-    FIO 
-    vi arr = {0, 1, 2, 5, -1, 3};
-
-    int n; cin >> n;
-
-    FenwickTree F(arr);
-
-    cout << F.query(1, 4) << endl;
-
-    F.increase(3, 1);
-    cout << F.query(1, 4) << endl;
-
-    return 0;
+        FIO 
+        MakeSet();
+        return 0;
 }
