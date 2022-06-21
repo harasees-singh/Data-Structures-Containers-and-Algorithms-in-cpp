@@ -38,22 +38,19 @@ int lookupSparseTable(vector<vi>& table, int l, int r){
 
 MOD_DEFINE
 int32_t main(){
-    vi arr = {4, 3, 2, 2};
+    vi in = {4, 3, 2, 2};
             //1, 2, 3, 4, 5, 6, 7, 8, 9
-    int n=1;
+    int lg = 1;
 
-    int count = 1;
+    while((1 << lg) < sz(in)) lg++;
 
-    while(n<<1 < sz(arr)) n <<= 1, count++;
+    vector<vi> sparseTable(lg + 1, vi(sz(in)+1));
 
-    n=count;
-    vector<vi> sparseTable(n + 1, vi(sz(arr)+1));
-
-    loop(i, 1, sz(arr)+1){sparseTable[0][i] = arr[i - 1];}
+    for(int i = 1; i < sz(in)+1; i++){sparseTable[0][i] = in[i - 1];}
 
     // 1 based indexing
-    loop(i, 0, n)
-        loop(j, 1, sz(arr)-(1<<i)+1){
+    for(int i = 0; i < lg; i++)
+        for(int j = 1; j < sz(in) - (1<<i) + 1; j++){
 
             sparseTable[i+1][j] = __gcd(sparseTable[i][j], sparseTable[i][j + (1<<i)]);
         } 

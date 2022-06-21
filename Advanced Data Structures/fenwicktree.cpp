@@ -39,50 +39,69 @@ struct FenwickTree{
     // increase and query take logn time and constant space.
     // constructor takes vector<int> input (a const reference) to construct the tree (ft) in nlogn time.
 
-    vector<int> ft;
+    vector<vi> ft;
 
-    FenwickTree(vi const &I){
-        ft.assign(I.size(), 0);
+    FenwickTree(string const &I){
+        ft.assign(I.size(), vi(26));
 
         for(int i = 0; i < I.size(); i++){
-            increase(i, I[i]);
+            put(i, I[i], 'a' - 1);   // put the char I[i] at pos i
         }
     }
 
-    int read(int idx){
-        if(idx < 0) return 0;
+    vi read(int idx){
+        if(idx < 0) return vi(26, 0);
 
-        int ret = 0;
+        // int ret = 0;
+        vi ret(26);
 
         for(int i = idx; i >= 0; i = (i&(i + 1)) - 1){
-            ret += ft[i];
+            for(int j = 0; j < 26; j++) ret[j] += ft[i][j];
+            // ret += ft[i];
         }
         return ret;
     }
 
-    void increase(int i, int delta){
+    void put(int i, int latest, int old){
+        latest = latest - 'a';
+        old = old - 'a';
         for(int j = i; j < ft.size(); j = j|(j + 1)){
-            ft[j] += delta;
+            // ft[j] = vi(26);
+            if(old > -1)
+                ft[j][old] -= 1;
+            ft[j][latest] += 1;
         }
     }
 
-    int query(int l, int r){
-        return read(r) - read(l - 1);
+    vi query(int l, int r){
+        vi L = read(l - 1);
+        vi R = read(r);
+
+        l(i, 0, 26) R[i] -= L[i];
+
+        return R;
     }
 };
 
 int32_t main(){
     FIO 
-    vi arr = {0, 1, 2, 5, -1, 3};
 
-    int n; cin >> n;
+    string a = "abc";
 
-    FenwickTree F(arr);
+    FenwickTree F(a);
 
-    cout << F.query(1, 4) << endl;
+    vi ret = F.query(0, 1); 
 
-    F.increase(3, 1);
-    cout << F.query(1, 4) << endl;
+    for(auto p : ret) cout <<p << ' '; cout << endl;
 
+    F.put(1, 'a', 'b');
+
+    ret = F.query(0, 1);
+
+    for(auto p : ret) cout <<p << ' '; cout << endl;
+
+    ret = F.query(0, 2);
+
+    for(auto p : ret) cout <<p << ' ';
     return 0;
 }

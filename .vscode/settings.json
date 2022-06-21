@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.ejs": "html",
         "unordered_set": "cpp",
         "list": "cpp",
         "future": "cpp",
@@ -69,7 +70,8 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled",
     "java.project.sourcePaths": [

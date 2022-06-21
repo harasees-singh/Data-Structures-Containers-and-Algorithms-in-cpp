@@ -46,7 +46,7 @@ void InsertionSort(vi &arr){
 int32_t main(){
     FIO 
 
-    // vi arr = {3, 5, 1, 7, 8, 4};
+    vi arr = {3, 5, 1, 7, 8, 4};
 
     vi arr = {8};
 

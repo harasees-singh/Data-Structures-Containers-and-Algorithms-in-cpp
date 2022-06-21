@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+ #include<bits/stdc++.h>
 #define infinity 999999999999999999
 #define float long double
 #define sz(v) ((int)(v).size())
@@ -8,7 +8,7 @@
 #define Or ||
 #define endl '\n'
 #define space " "
-#define int long long
+#define int long long  
 #define pii pair<int, int>
 #define vi vector<int>
 #define pb(n) push_back(n)
