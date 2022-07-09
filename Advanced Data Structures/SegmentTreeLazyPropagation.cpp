@@ -53,6 +53,7 @@ struct SegTree{
     vector<int> a;
     vector<int> lazy; 
 
+    
     SegTree(vector<int> &a){
         this->a = a;
         N = a.size();
