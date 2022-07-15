@@ -22,41 +22,64 @@
 #define safe_unordered_map(int, T) unordered_map<int, T, custom_hash>
 
 using namespace std;
+struct SparseTable{
+    // 1 based indexing
+    vector<vector<int>> M;
+    vector<vector<int>> Midx;
+    int lg = 1;
+    vector<int> in;
 
+    SparseTable(vector<int> &I){
+        in = I;
 
-int lookupSparseTable(vector<vi>& table, int l, int r){
+        while((1 << lg) < sz(in)) lg++;
 
-    int n=1;
+        M = vector<vector<int>> (lg + 1, vector<int> (sz(in) + 1));
+        Midx = vector<vector<int>> (lg + 1, vector<int> (sz(in) + 1));
 
-    int count = 0;
+        for(int i = 1; i < sz(in) + 1; i++)
+            Midx[0][i] = i - 1;
+        
+        for(int i = 1; i < sz(in) + 1; i++)
+            M[0][i] = in[i - 1];
 
-    while(n<<1 < (r-l+1)) n <<= 1, count++;
+        for(int i = 0; i < lg; i++)
+            for(int j = 1; j < sz(in) - (1 << i) + 1; j++)
+                Midx[i + 1][j] = (in[Midx[i][j]] < in[Midx[i][j + (1 << i)]] ? Midx[i][j] : Midx[i][j + (1 << i)]);
+            
+        for(int i = 0; i < lg; i++)
+            for(int j = 1; j < sz(in) - (1 << i) + 1; j++)
+                M[i + 1][j] = min(M[i][j], M[i][j + (1 << i)]);
+        
+    }
 
-    return __gcd(table[count][l], table[count][r - n + 1]);
-    
-}
+    int readidx(int l, int r){
+        assert(l <= r and l > -1);
+
+        int n = 1, count = 0;
+
+        while(n << 1 < (r - l + 1)) n <<= 1, count++;
+
+        return in[Midx[count][l]] < in[Midx[count][r - n + 1]] ? Midx[count][l] : Midx[count][r - n + 1];
+    }
+    int read(int l, int r){
+        assert(l <= r and l > -1);
+        
+        int n = 1, count = 0;
+      
+        while(n << 1 < (r - l + 1)) n <<= 1, count++;
+
+        return min(M[count][l], M[count][r - n + 1]);
+    }
+};
 
 MOD_DEFINE
 int32_t main(){
-    vi in = {4, 3, 2, 2};
+    vi in = {4, 3, 2, 0};
             //1, 2, 3, 4, 5, 6, 7, 8, 9
-    int lg = 1;
+    SparseTable T(in);
 
-    while((1 << lg) < sz(in)) lg++;
+    cout << T.read(1, 3) << endl;
 
-    vector<vi> sparseTable(lg + 1, vi(sz(in)+1));
-
-    for(int i = 1; i < sz(in)+1; i++){sparseTable[0][i] = in[i - 1];}
-
-    // 1 based indexing
-    for(int i = 0; i < lg; i++)
-        for(int j = 1; j < sz(in) - (1<<i) + 1; j++){
-
-            sparseTable[i+1][j] = __gcd(sparseTable[i][j], sparseTable[i][j + (1<<i)]);
-        } 
-
-    int l, r;
-
-    cin >> l >> r;
-    cout << lookupSparseTable(sparseTable, l, r) << endl;
+    cout << T.readidx(2, 4) << endl; 
 }

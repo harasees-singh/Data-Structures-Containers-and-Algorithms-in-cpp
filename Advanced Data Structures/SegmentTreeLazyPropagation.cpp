@@ -45,11 +45,11 @@ MOD_DEFINE
 struct SegTree{
     // query zero based, lazy propagation implememted.
     // Update adds delta to the range l, r 
-    // query returns max value in the range l, r.
+    // query returns max value in the range l, r and the index at which it occurs.
 
     // nodes 1 based (dw if only using superficially)
     int N;
-    vector<int> t;
+    vector<pii> t;
     vector<int> a;
     vector<int> lazy; 
 
@@ -57,30 +57,30 @@ struct SegTree{
     SegTree(vector<int> &a){
         this->a = a;
         N = a.size();
-        t = vector<int> (4 * N + 1);
-        lazy = vector<int> (4 * N + 1);
+        t = vector<pii> (4 * N + 5);
+        lazy = vector<int> (4 * N + 5);
         build(1, 0, N - 1);
     }
 
     void build(int v, int tl, int tr) {
         if(tl == tr) 
-            t[v] = a[tl];
+            t[v].ff = a[tl], t[v].ss = tl;
         
         else {
-            int tm = (tl + tr) / 2;
-            
-            build(v * 2, tl, tm);
-            
-            build(v * 2 + 1, tm + 1, tr);
+                int tm = (tl + tr) / 2;
+                
+                build(v * 2, tl, tm);
+                
+                build(v * 2 + 1, tm + 1, tr);
 
-            t[v] = max(t[v * 2], t[v * 2 + 1]);
+                t[v] = max(t[v * 2], t[v * 2 + 1]);
         }
     }
     void push(int v) {
-        t[v*2] += lazy[v];
-        lazy[v*2] += lazy[v];
-        t[v*2+1] += lazy[v];
-        lazy[v*2+1] += lazy[v];
+        t[v * 2].ff += lazy[v];
+        lazy[v * 2] += lazy[v];
+        t[v * 2 + 1].ff += lazy[v];
+        lazy[v * 2 + 1] += lazy[v];
         lazy[v] = 0;
     }
 
@@ -93,33 +93,35 @@ struct SegTree{
         if (l > r) 
             return;
         if (l == tl && tr == r) {
-            t[v] += addend;
+            t[v].ff += addend;
             lazy[v] += addend;
         } else {
-            push(v);
-            int tm = (tl + tr) / 2;
-            update(v*2, tl, tm, l, min(r, tm), addend);
-            update(v*2+1, tm+1, tr, max(l, tm+1), r, addend);
-            t[v] = max(t[v*2], t[v*2+1]);
+                push(v);
+                int tm = (tl + tr) / 2;
+                update(v * 2, tl, tm, l, min(r, tm), addend);
+                update(v * 2 + 1, tm + 1, tr, max(l, tm + 1), r, addend);
+                
+                t[v] = max(t[v * 2], t[v * 2 + 1]);
+
         }
     }
-    int Query(int l, int r){
+    pii Query(int l, int r){
         return query(1, 0, N - 1, l, r);
     }
 
-    int query(int v, int tl, int tr, int l, int r) {
+    pii query(int v, int tl, int tr, int l, int r) {
         if (l > r)
-            return -infinity;
+            return {-infinity, -1};
         if (l <= tl && tr <= r)
             return t[v];
         push(v);
         int tm = (tl + tr) / 2;
-        return max(query(v*2, tl, tm, l, min(r, tm)), 
-                query(v*2+1, tm+1, tr, max(l, tm+1), r));
+        pii f = query(v * 2, tl, tm, l, min(r, tm)), s = query(v * 2 + 1, tm + 1, tr, max(l, tm + 1), r); 
+        
+        return max(f, s);
     }
 
 };
-
 void slv(){
         vi a = {-1, 2, 1, 3, 7, 8, -9, 0, 4, 15};
 

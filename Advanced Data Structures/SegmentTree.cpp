@@ -30,65 +30,72 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 MOD_DEFINE
 
-int n = 10;
+struct SegmentTree{
+        int n;
 
-int T[40];
+        vector<int> t, a;
 
-void build(vi &a, int v, int tl, int tr){
-    // v being the current tree node number.
-    // tl and tr being the left and right boundaries of indices that node v will store the answer to
-    if(tl == tr)
-            T[v] = a[tl];
-    
-    else{
-            int tm = (tl + tr)/2;
-            build(a, v*2, tl, tm);
-            build(a, v*2 + 1, tm + 1, tr);
+        SegmentTree(vector<int> &arr){
+                n = arr.size();
+                a = arr;
+                t = vector<int> (4 * n);
 
-            T[v] = T[v*2] + T[v*2 + 1];
-    }
-}
-
-int QuerySum(int v, int tl, int tr, int l, int r){
-
-        if(tl >= l and tr <= r) 
-                return T[v];
-        if(tr < l or tl > r)
-                return 0;
-                
-        int mid = (tl + tr)/2;
-
-        return QuerySum(2*v, tl, mid, l, r) + QuerySum(2*v + 1, mid + 1, tr, l, r);
-}
-
-void update(int v, int tl, int tr, int pos, int new_val) {
-        if (tl == tr) 
-                T[v] = new_val;
-
-        else{
-                int tm = (tl + tr) / 2;
-
-                if (pos <= tm)
-                        update(v*2, tl, tm, pos, new_val);
-                else
-                        update(v*2+1, tm+1, tr, pos, new_val);
-                        
-                T[v] = T[v*2] + T[v*2+1];
+                build(1, 0, n - 1);
         }
-}
+        int Query(int l, int r){
+                // 0 index based
+                assert(min(l, r) >= 0 and max(l, r) < n);
+                return sum(1, 0, n - 1, l, r);
+        }
+        void Update(int id, int x){
+                assert(id >= 0 and id < n);
+                // 0 index based
+                update(1, 0, n - 1, id, x);
+        }
+
+        void build(int v, int tl, int tr) {
+                if (tl == tr) {
+                        t[v] = a[tl];
+                } else {
+                        int tm = (tl + tr) / 2;
+                        build(v * 2, tl, tm);
+                        build(v * 2 + 1, tm + 1, tr);
+                        t[v] = t[v * 2] + t[v * 2 + 1];
+                }
+        }
+        int sum(int v, int tl, int tr, int l, int r) {
+                if (l > r) 
+                        return 0;
+                if (l == tl && r == tr) {
+                        return t[v];
+                }
+                int tm = (tl + tr) / 2;
+                return sum(v * 2, tl, tm, l, min(r, tm)) + sum(v * 2 + 1, tm + 1, tr, max(l, tm + 1), r);
+        }
+        void update(int v, int tl, int tr, int pos, int new_val) {
+                if (tl == tr) {
+                        t[v] = new_val;
+                } 
+                else{
+                        int tm = (tl + tr) / 2;
+                        if (pos <= tm)
+                                update(v * 2, tl, tm, pos, new_val);
+                        else
+                                update(v * 2 + 1, tm + 1, tr, pos, new_val);
+                        t[v] = t[v * 2] + t[v * 2 + 1];
+                }
+        }
+};
 int32_t main(){
-    FIO 
+        FIO 
 
-    vi a = {0, 1, -1, 2, -2, 4, 4, 1, 1, 6, -6};
+        vi a = {0, 1, -1, 2, -2, 4, 4, 1, 1, 6, -6};
 
-        build(a, 1, 1, 10);
+        SegmentTree T(a);
 
-        update(1, 1, 10, 1, 5);
+        T.Update(0, 5);
 
-        for(int i = 0; i < 40; i++)
-                cout << T[i] << ' '; cout << endl;
+        cout << T.Query(1, 3) << endl;
 
-        cout << QuerySum(1, 1, 10, 1, 1) << endl;
-
-    return 0;
+        return 0;
 }
