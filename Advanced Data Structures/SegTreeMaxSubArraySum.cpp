@@ -43,29 +43,31 @@ template<typename Iterable> void prnIter(const Iterable& ITER, ostream&out = cou
 
 MOD_DEFINE
 
-struct data{
+struct Data{
+    // subarray sum, max/min pref, max/min suff, ans to the query (.first stores max subarray sum and .second stores min subarray sum)
     pair<int, int> sum, pref, suff, ans;
 };
 
 struct SegTreeMaxSubSum{
     // zero based indexing
-
-    vector<data> t;
+    // use Query and Update
+    vector<Data> t;
     vector<int> a;
 
     SegTreeMaxSubSum(const vector<int> &in){
         a = in;
-        t = vector<data> (in.size() * 4); 
+        t = vector<Data> (in.size() * 4); 
         build(1, 0, sz(a) - 1);
     }
-    data make_data (int val) {
-        data res;
+    
+    Data make_Data (int val) {
+        Data res;
         res.sum = {val, val};
         res.pref = res.suff = res.ans = {max(0ll, val), min(0ll, val)};
         return res;
     }
-    data combine (data l, data r) {
-        data res;
+    Data combine (Data l, Data r) {
+        Data res;
         res.sum = {l.sum.first + r.sum.first, l.sum.second + r.sum.second};
         res.pref = {max(l.pref.first, l.sum.first + r.pref.first), min(l.pref.second, l.sum.second + r.pref.second)};
         res.suff = {max(r.suff.first, r.sum.first + l.suff.first), min(r.suff.second, r.sum.second + l.suff.second)};
@@ -76,7 +78,7 @@ struct SegTreeMaxSubSum{
     }
     void build(int v, int tl, int tr) {
         if (tl == tr)
-            t[v] = make_data(a[tl]);
+            t[v] = make_Data(a[tl]);
         else {
             int tm = (tl + tr) / 2;
             build(v * 2, tl, tm);
@@ -87,7 +89,7 @@ struct SegTreeMaxSubSum{
     }
     void update(int v, int tl, int tr, int pos, int new_val) {
         if (tl == tr)
-            t[v] = make_data(new_val);
+            t[v] = make_Data(new_val);
         else {
             int tm = (tl + tr) / 2;
             if (pos <= tm)
@@ -98,7 +100,7 @@ struct SegTreeMaxSubSum{
             t[v] = combine(t[v * 2], t[v * 2 + 1]);
         }
     }
-    data query(int v, int tl, int tr, int l, int r) {
+    Data query(int v, int tl, int tr, int l, int r) {
         if (l == tl && tr == r)
             return t[v];
         int tm = (tl + tr) / 2;
@@ -110,7 +112,7 @@ struct SegTreeMaxSubSum{
         return combine(query(v * 2, tl, tm, l, tm), query(v * 2 + 1, tm + 1, tr, tm + 1, r));
     }
 
-    data Query(int l, int r){
+    Data Query(int l, int r){
         return query(1, 0, sz(a) - 1, l, r);
     }
     void Update(int i, int d){
